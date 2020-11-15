@@ -1,16 +1,19 @@
+"""
+Implementing PID from scratch
+"""
 from Helpers import sensor_read
 from matplotlib import pyplot
 
 ltime = 0
 lval = None
 
-Kp = 1
-Ki = 0
-Kd = 0
+Kp =.9
+Ki = .00001
+Kd = 0.05
 
 ti = 0
 
-time_diff = 1
+time_diff = 0.05
 
 
 def normal_pid_exec(set_point, current):
@@ -39,8 +42,7 @@ def normal_pid_exec(set_point, current):
         if lval is not None:
             dv = (e - lval)
 
-            # Subtracted to resist change, else it will amplify noise instead of damping
-            new -= dv / dt * Kd  # Adding derivative part of PID
+            new += (dv / dt) * Kd  # Adding derivative part of PID
 
         ti += e * dt  # Accumulating values of errors (integral)
 
@@ -61,10 +63,11 @@ if __name__ == "__main__":
 
     x = []
     y = []
-    for _ in range(5):  # Main execution loop
-        res = normal_pid_exec(set_point, sensor_read(res))
+    for _ in range(int(100/time_diff)):  # Main execution loop
+        reading = sensor_read(res)
+        res = normal_pid_exec(set_point, reading)
         x.append(ltime)
-        y.append(res)
+        y.append(reading)
 
     pyplot.plot(x, y)
     pyplot.show()
