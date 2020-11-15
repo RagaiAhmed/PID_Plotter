@@ -53,6 +53,19 @@ def perfect_w_noise_at_t(x,offset,range,t):
     sum += x-offset
     return sum  # Example of a accumulating system with offset and noise at specific time
 
+velocity = 0
+def inertia_w_noise_at_t(x,offset,range,t):
+    """
+        Acts as a feedback sensor
+    :return: "hypothetical" reading after applying x
+    """
+    global sum,time,velocity
+    if (x == -1): return 0
+    time+=1
+    if time==t: sum+=random()*range
+    velocity += x-offset
+    sum+=velocity
+    return sum  # Example of a inertial accumulating system with offset and noise at specific time
 
 def sensor_read(x):
-    return perfect_w_noise_at_t(x,5,10,50)  # Maps to the underlying system
+    return inertia_w_noise_at_t(x,5,10,1000)  # Maps to the underlying system
