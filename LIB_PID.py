@@ -16,9 +16,10 @@ if __name__ == "__main__":
     for _ in range(5):  # Main execution loop
         sleep(1)
 
-        res = pid(sensor_read(res))
+        reading = sensor_read(res)
+        res = pid(reading)
         x.append(_+1)  # Time
-        y.append(res)
+        y.append(reading)
 
     pyplot.plot(x,y)
     pyplot.show()
